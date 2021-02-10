@@ -1,7 +1,7 @@
 library("tdr-jenkinslib")
 
   def versionTag = "v${env.BUILD_NUMBER}"
-  def libraryName = "consignment-export"
+  def libraryName = "consignment-export-authoriser"
   def repo = "tdr-${libraryName}"
   def scalaVersion = 2.13
 

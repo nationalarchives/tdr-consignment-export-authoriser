@@ -1,4 +1,4 @@
-import Dependencies.{catsEffect, generatedGraphql, graphqlClient, log4cats, log4catsSlf4j, mockitoScala, mockitoScalaTest, pureConfig, pureConfigCatsEffect, slf4j, _}
+import Dependencies._
 
 ThisBuild / scalaVersion     := "2.13.4"
 ThisBuild / version          := "0.1.0-SNAPSHOT"
@@ -26,6 +26,7 @@ lazy val root = (project in file("."))
     ),
     fork in Test := true,
     javaOptions in Test += s"-Dconfig.file=${sourceDirectory.value}/test/resources/application.conf",
+    assemblyJarName in assembly := "consignment-export-authoriser.jar",
     assemblyMergeStrategy in assembly := {
       case PathList("META-INF", xs@_*) => MergeStrategy.discard
       case _ => MergeStrategy.first

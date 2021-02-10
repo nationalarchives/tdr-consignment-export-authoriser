@@ -4,5 +4,5 @@ deployToLambda(
   stage: params.STAGE,
   libraryName: "export-api-authoriser",
   version: params.TO_DEPLOY,
-  deploymentPackageName: "consignment-export.jar"
+  deploymentPackageName: "consignment-export-authoriser.jar"
 )
