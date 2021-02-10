@@ -1,0 +1,20 @@
+{
+  "data": null,
+  "errors": [
+    {
+      "message": "User '4ab14990-ed63-4615-8336-56fbb9960300' does not own consignment '6e3b76c4-1745-4467-8ac5-b4dd736e1b3e'",
+      "path": [
+        "getConsignment"
+      ],
+      "locations": [
+        {
+          "column": 2,
+          "line": 1
+        }
+      ],
+      "extensions": {
+        "code": "NOT_AUTHORISED"
+      }
+    }
+  ]
+}

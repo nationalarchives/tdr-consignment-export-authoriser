@@ -1,0 +1,8 @@
+library("tdr-jenkinslib")
+
+deployToLambda(
+  stage: params.STAGE,
+  libraryName: "export-api-authoriser",
+  version: params.TO_DEPLOY,
+  deploymentPackageName: "consignment-export.jar"
+)
