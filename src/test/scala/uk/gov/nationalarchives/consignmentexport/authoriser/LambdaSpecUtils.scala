@@ -14,6 +14,7 @@ import scala.io.Source.fromResource
 class LambdaSpecUtils extends AnyFlatSpec with BeforeAndAfterEach with BeforeAndAfterAll with TableDrivenPropertyChecks with Matchers with MockitoSugar with EitherValues {
 
   val wiremockGraphqlServer = new WireMockServer(9001)
+  val wiremockKmsServer = new WireMockServer(9002)
 
   val graphQlPath = "/graphql"
 
@@ -22,16 +23,22 @@ class LambdaSpecUtils extends AnyFlatSpec with BeforeAndAfterEach with BeforeAnd
   def graphqlGetConsignment(filename: String): StubMapping = wiremockGraphqlServer.stubFor(post(urlEqualTo(graphQlPath))
     .willReturn(okJson(fromResource(s"json/$filename.json").mkString)))
 
+  def stubKmsResponse = wiremockKmsServer.stubFor(post(urlEqualTo("/"))
+    .willReturn(okJson(s"""{"Plaintext": "aHR0cDovL2xvY2FsaG9zdDo5MDAxL2dyYXBocWw="}""")))
+
   override def beforeEach(): Unit = {
     wiremockGraphqlServer.resetAll()
+    wiremockKmsServer.resetAll()
   }
 
   override def beforeAll(): Unit = {
     wiremockGraphqlServer.start()
+    wiremockKmsServer.start()
   }
 
   override def afterAll(): Unit = {
     wiremockGraphqlServer.stop()
+    wiremockKmsServer.stop()
   }
 
   val inputs: TableFor2[String, String] = Table(

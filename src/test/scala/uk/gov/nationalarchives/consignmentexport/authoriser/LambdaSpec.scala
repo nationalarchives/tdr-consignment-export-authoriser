@@ -11,6 +11,7 @@ class LambdaSpec extends LambdaSpecUtils {
   forAll(inputs) {
     (filename, expectedEffect) => {
       "The process method" should s"$expectedEffect access for file $filename" in {
+        stubKmsResponse
         graphqlGetConsignment(filename)
         val output = mock[ByteArrayOutputStream]
         val byteArrayCaptor: ArgumentCaptor[Array[Byte]] = ArgumentCaptor.forClass(classOf[Array[Byte]])
