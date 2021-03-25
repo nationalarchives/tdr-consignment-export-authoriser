@@ -37,7 +37,7 @@ class Lambda {
   def getOutput(input: InputStream) = for {
     input <- IO.fromEither(decode[Input](Source.fromInputStream(input).mkString))
     config <- Blocker[IO].use(ConfigSource.default.loadF[IO, Configuration])
-    kmsUtils = KMSUtils(kms, Map("LambdaFunctionName" -> config.function.name))
+    kmsUtils = KMSUtils(kms(config.kms.endpoint), Map("LambdaFunctionName" -> config.function.name))
     graphQLClient = new GraphQLClient[Data, Variables](kmsUtils.decryptValue(config.api.url))
     consignmentId = UUID.fromString(input.methodArn.split("/").last)
     result <- IO.fromFuture(IO(graphQLClient.getResult(new BearerAccessToken(input.authorizationToken), document, Variables(consignmentId).some)))
@@ -64,7 +64,8 @@ object Lambda {
 
   case class Api(url: String)
   case class LambdaFunction(name: String)
-  case class Configuration(api: Api, function: LambdaFunction)
+  case class Kms(endpoint: String)
+  case class Configuration(api: Api, function: LambdaFunction, kms: Kms)
   case class Input(`type`: String, methodArn: String, authorizationToken: String)
   case class Statement(Action: String = "execute-api:Invoke", Effect: String, Resource: String)
   case class PolicyDocument(Version: String, Statement: List[Statement])
