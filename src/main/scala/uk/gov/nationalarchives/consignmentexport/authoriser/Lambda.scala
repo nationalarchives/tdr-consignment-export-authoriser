@@ -6,7 +6,6 @@ import java.util.UUID
 import cats.effect.{Blocker, ContextShift, IO, Resource}
 import cats.implicits._
 import com.nimbusds.oauth2.sdk.token.BearerAccessToken
-import com.typesafe.config.ConfigFactory
 import graphql.codegen.GetConsignment.getConsignment.{Data, Variables, document}
 import pureconfig.ConfigSource
 import pureconfig.generic.auto._
