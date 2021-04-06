@@ -3,7 +3,6 @@ package uk.gov.nationalarchives.consignmentexport.authoriser
 import java.io.{InputStream, OutputStream}
 import java.nio.charset.Charset
 import java.util.UUID
-
 import cats.effect.{Blocker, ContextShift, IO, Resource}
 import cats.implicits._
 import com.nimbusds.oauth2.sdk.token.BearerAccessToken
@@ -16,6 +15,8 @@ import io.circe.parser.decode
 import io.circe.generic.auto._
 import io.circe.syntax._
 import sttp.client.{HttpURLConnectionBackend, Identity, NothingT, SttpBackend}
+import uk.gov.nationalarchives.aws.utils.Clients.kms
+import uk.gov.nationalarchives.aws.utils.KMSUtils
 import uk.gov.nationalarchives.consignmentexport.authoriser.Lambda._
 
 import scala.concurrent.ExecutionContextExecutor
@@ -35,7 +36,8 @@ class Lambda {
   def getOutput(input: InputStream) = for {
     input <- IO.fromEither(decode[Input](Source.fromInputStream(input).mkString))
     config <- Blocker[IO].use(ConfigSource.default.loadF[IO, Configuration])
-    graphQLClient = new GraphQLClient[Data, Variables](config.api.url)
+    kmsUtils = KMSUtils(kms(config.kms.endpoint), Map("LambdaFunctionName" -> config.function.name))
+    graphQLClient = new GraphQLClient[Data, Variables](kmsUtils.decryptValue(config.api.url))
     consignmentId = UUID.fromString(input.methodArn.split("/").last)
     result <- IO.fromFuture(IO(graphQLClient.getResult(new BearerAccessToken(input.authorizationToken), document, Variables(consignmentId).some)))
   } yield {
@@ -60,7 +62,9 @@ object Lambda {
   implicit val backend: SttpBackend[Identity, Nothing, NothingT] = HttpURLConnectionBackend()
 
   case class Api(url: String)
-  case class Configuration(api: Api)
+  case class LambdaFunction(name: String)
+  case class Kms(endpoint: String)
+  case class Configuration(api: Api, function: LambdaFunction, kms: Kms)
   case class Input(`type`: String, methodArn: String, authorizationToken: String)
   case class Statement(Action: String = "execute-api:Invoke", Effect: String, Resource: String)
   case class PolicyDocument(Version: String, Statement: List[Statement])
