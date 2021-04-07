@@ -15,3 +15,13 @@ This is the code for the second step. It does the following:
 The environment variables in the deployed lambda are encrypted using KMS and then base64 encoded. These are then decoded in the lambda. Because of this, any variables in `src/test/resources/application.conf` which come from environment variables in `src/main/resources/application.conf` need to be stored base64 encoded. There are comments next to each variable to say what the base64 string decodes to. If you want to add a new variable you can run `echo -n "value of variable" | base64 -w 0` and paste the output into the test application.conf
 
 Only values in the test application.conf which come from environment variables in main application.conf need to be base64 encoded.For example, `migrations-user` is hard coded in main application.conf and so can be hard coded in test application.conf
+
+### Run locally
+
+Set the following environment variables:
+
+- `AWS_LAMBDA_FUNCTION_NAME`: any value
+- `CONSIGNMENT_ID`: the ID of a consignment on integration
+- `ACCESS_TOKEN`: a valid access token for integration belonging to a user who has permission to access the consignment
+
+Run the `LambdaRunner` app from IntelliJ, or with `sbt run` on the command line.
