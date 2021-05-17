@@ -48,16 +48,15 @@ class Lambda {
 
     _ <- logger.info(s"Calling API to check user's permissions for consignment '$consignmentId'")
     graphQLClient = new GraphQLClient[Data, Variables](decryptedConfig)
-    result <- IO.fromFuture(IO(graphQLClient.getResult(new BearerAccessToken(input.authorizationToken), document, Variables(consignmentId).some)))
-
-    _ <- logger.info(s"Got result from API")
-  } yield {
-    val effect = result.errors.headOption match {
-      case Some(_) => "Deny"
-      case None => "Allow"
+    effect <- IO.fromFuture(IO(graphQLClient.getResult(new BearerAccessToken(input.authorizationToken), document, Variables(consignmentId).some))).attempt.map {
+      case Left(_) => "Deny"
+      case Right(value) => value.errors.headOption match {
+        case Some(_) => "Deny"
+        case None => "Allow"
+      }
     }
-    Output(PolicyDocument("2012-10-17", List(Statement(Effect = effect, Resource = input.methodArn)))).asJson.noSpaces
-  }
+    _ <- logger.info(s"Got result from API")
+  } yield Output(PolicyDocument("2012-10-17", List(Statement(Effect = effect, Resource = input.methodArn)))).asJson.noSpaces
 
   def process(inputStream: InputStream, outputStream: OutputStream): Unit = {
     for {
