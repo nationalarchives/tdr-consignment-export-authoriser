@@ -3,7 +3,6 @@ package uk.gov.nationalarchives.consignmentexport.authoriser
 import java.io.{InputStream, OutputStream}
 import java.nio.charset.Charset
 import java.util.UUID
-
 import cats.effect.{Blocker, ContextShift, IO, Resource}
 import cats.implicits._
 import com.nimbusds.oauth2.sdk.token.BearerAccessToken
@@ -16,10 +15,12 @@ import pureconfig.ConfigSource
 import pureconfig.generic.auto._
 import pureconfig.module.catseffect.syntax._
 import sttp.client.{HttpURLConnectionBackend, Identity, NothingT, SttpBackend}
+import sttp.model.StatusCode
 import uk.gov.nationalarchives.aws.utils.Clients.kms
 import uk.gov.nationalarchives.aws.utils.KMSUtils
 import uk.gov.nationalarchives.consignmentexport.authoriser.Lambda._
 import uk.gov.nationalarchives.tdr.GraphQLClient
+import uk.gov.nationalarchives.tdr.error.HttpException
 
 import scala.concurrent.ExecutionContextExecutor
 import scala.io.Source
@@ -49,7 +50,8 @@ class Lambda {
     _ <- logger.info(s"Calling API to check user's permissions for consignment '$consignmentId'")
     graphQLClient = new GraphQLClient[Data, Variables](decryptedConfig)
     effect <- IO.fromFuture(IO(graphQLClient.getResult(new BearerAccessToken(input.authorizationToken), document, Variables(consignmentId).some))).attempt.map {
-      case Left(_) => "Deny"
+      case Left(e: HttpException) if e.response.code == StatusCode.Forbidden => "Deny"
+      case Left(e: HttpException) => throw e
       case Right(value) => value.errors.headOption match {
         case Some(_) => "Deny"
         case None => "Allow"

@@ -2,7 +2,7 @@ package uk.gov.nationalarchives.consignmentexport.authoriser
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder
-import com.github.tomakehurst.wiremock.client.WireMock.{forbidden, okJson, post, urlEqualTo}
+import com.github.tomakehurst.wiremock.client.WireMock.{forbidden, okJson, post, serverError, urlEqualTo}
 import com.github.tomakehurst.wiremock.common.FileSource
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 import com.github.tomakehurst.wiremock.extension.{Parameters, ResponseDefinitionTransformer}
@@ -47,8 +47,11 @@ class LambdaSpecUtils extends AnyFlatSpec with BeforeAndAfterEach with BeforeAnd
   def graphqlGetConsignment(filename: String): StubMapping = wiremockGraphqlServer.stubFor(post(urlEqualTo(graphQlPath))
     .willReturn(okJson(fromResource(s"json/$filename.json").mkString)))
 
-  def graphqlReturnError: StubMapping = wiremockGraphqlServer.stubFor(post(urlEqualTo(graphQlPath))
+  def graphqlReturnForbiddenError: StubMapping = wiremockGraphqlServer.stubFor(post(urlEqualTo(graphQlPath))
     .willReturn(forbidden()))
+
+  def graphqlReturnServerError: StubMapping = wiremockGraphqlServer.stubFor(post(urlEqualTo(graphQlPath))
+    .willReturn(serverError()))
 
   def stubKmsResponse = wiremockKmsServer.stubFor(post(urlEqualTo("/")))
 
