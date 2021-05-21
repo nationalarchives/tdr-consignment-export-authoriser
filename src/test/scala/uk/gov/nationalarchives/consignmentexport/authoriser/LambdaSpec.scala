@@ -52,4 +52,15 @@ class LambdaSpec extends LambdaSpecUtils {
     }
     exception.response.code.code should equal(500)
   }
+
+  "The process method" should "return Deny if the API response is OK but contains a general error" in {
+    stubKmsResponse
+    graphqlGetConsignment("general_error")
+    val input = """{"type": "TOKEN", "methodArn": "a/method/3e133bf3-7a3f-4c56-8e17-f667dc182f02", "authorizationToken": "token"}""".stripMargin
+    val stream = new java.io.ByteArrayInputStream(input.getBytes(java.nio.charset.StandardCharsets.UTF_8.name))
+    val exception = intercept[RuntimeException] {
+      new Lambda().process(stream, new ByteArrayOutputStream())
+    }
+    exception.getMessage should equal("GraphQL response contained errors: User '4ab14990-ed63-4615-8336-56fbb9960300' does not own consignment '6e3b76c4-1745-4467-8ac5-b4dd736e1b3e'")
+  }
 }

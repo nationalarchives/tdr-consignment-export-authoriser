@@ -73,7 +73,6 @@ class LambdaSpecUtils extends AnyFlatSpec with BeforeAndAfterEach with BeforeAnd
   val inputs: TableFor2[String, String] = Table(
     ("filename", "expectedEffect"),
     ("auth_error", "Deny"),
-    ("general_error", "Deny"),
     ("no_error", "Allow")
   )
 }

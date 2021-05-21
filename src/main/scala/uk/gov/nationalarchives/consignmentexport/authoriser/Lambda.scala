@@ -20,7 +20,7 @@ import uk.gov.nationalarchives.aws.utils.Clients.kms
 import uk.gov.nationalarchives.aws.utils.KMSUtils
 import uk.gov.nationalarchives.consignmentexport.authoriser.Lambda._
 import uk.gov.nationalarchives.tdr.GraphQLClient
-import uk.gov.nationalarchives.tdr.error.HttpException
+import uk.gov.nationalarchives.tdr.error.{GraphQlError, HttpException, NotAuthorisedError}
 
 import scala.concurrent.ExecutionContextExecutor
 import scala.io.Source
@@ -52,9 +52,10 @@ class Lambda {
     effect <- IO.fromFuture(IO(graphQLClient.getResult(new BearerAccessToken(input.authorizationToken), document, Variables(consignmentId).some))).attempt.map {
       case Left(e: HttpException) if e.response.code == StatusCode.Forbidden => "Deny"
       case Left(e: HttpException) => throw e
-      case Right(value) => value.errors.headOption match {
-        case Some(_) => "Deny"
-        case None => "Allow"
+      case Right(response) => response.errors match {
+        case Nil => "Allow"
+        case List(_: NotAuthorisedError) => "Deny"
+        case errors => throw new RuntimeException(s"GraphQL response contained errors: ${errors.map(e => e.message).mkString}")
       }
     }
     _ <- logger.info(s"Got result from API")
