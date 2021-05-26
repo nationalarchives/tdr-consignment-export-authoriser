@@ -51,7 +51,7 @@ class Lambda {
     graphQLClient = new GraphQLClient[Data, Variables](decryptedConfig)
     effect <- IO.fromFuture(IO(graphQLClient.getResult(new BearerAccessToken(input.authorizationToken), document, Variables(consignmentId).some))).attempt.map {
       case Left(e: HttpException) if e.response.code == StatusCode.Forbidden => "Deny"
-      case Left(e: HttpException) => throw e
+      case Left(e: Throwable) => throw e
       case Right(response) => response.errors match {
         case Nil => "Allow"
         case List(_: NotAuthorisedError) => "Deny"
