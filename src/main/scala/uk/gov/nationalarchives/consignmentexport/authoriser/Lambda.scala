@@ -3,7 +3,6 @@ package uk.gov.nationalarchives.consignmentexport.authoriser
 import java.io.{InputStream, OutputStream}
 import java.nio.charset.Charset
 import java.util.UUID
-
 import cats.effect.{Blocker, ContextShift, IO, Resource}
 import cats.implicits._
 import com.nimbusds.oauth2.sdk.token.BearerAccessToken
@@ -16,10 +15,12 @@ import pureconfig.ConfigSource
 import pureconfig.generic.auto._
 import pureconfig.module.catseffect.syntax._
 import sttp.client.{HttpURLConnectionBackend, Identity, NothingT, SttpBackend}
+import sttp.model.StatusCode
 import uk.gov.nationalarchives.aws.utils.Clients.kms
 import uk.gov.nationalarchives.aws.utils.KMSUtils
 import uk.gov.nationalarchives.consignmentexport.authoriser.Lambda._
 import uk.gov.nationalarchives.tdr.GraphQLClient
+import uk.gov.nationalarchives.tdr.error.{GraphQlError, HttpException, NotAuthorisedError}
 
 import scala.concurrent.ExecutionContextExecutor
 import scala.io.Source
@@ -48,16 +49,17 @@ class Lambda {
 
     _ <- logger.info(s"Calling API to check user's permissions for consignment '$consignmentId'")
     graphQLClient = new GraphQLClient[Data, Variables](decryptedConfig)
-    result <- IO.fromFuture(IO(graphQLClient.getResult(new BearerAccessToken(input.authorizationToken), document, Variables(consignmentId).some)))
-
-    _ <- logger.info(s"Got result from API")
-  } yield {
-    val effect = result.errors.headOption match {
-      case Some(_) => "Deny"
-      case None => "Allow"
+    effect <- IO.fromFuture(IO(graphQLClient.getResult(new BearerAccessToken(input.authorizationToken), document, Variables(consignmentId).some))).attempt.map {
+      case Left(e: HttpException) if e.response.code == StatusCode.Forbidden => "Deny"
+      case Left(e: Throwable) => throw e
+      case Right(response) => response.errors match {
+        case Nil => "Allow"
+        case List(_: NotAuthorisedError) => "Deny"
+        case errors => throw new RuntimeException(s"GraphQL response contained errors: ${errors.map(e => e.message).mkString}")
+      }
     }
-    Output(PolicyDocument("2012-10-17", List(Statement(Effect = effect, Resource = input.methodArn)))).asJson.noSpaces
-  }
+    _ <- logger.info(s"Got result from API")
+  } yield Output(PolicyDocument("2012-10-17", List(Statement(Effect = effect, Resource = input.methodArn)))).asJson.noSpaces
 
   def process(inputStream: InputStream, outputStream: OutputStream): Unit = {
     for {
