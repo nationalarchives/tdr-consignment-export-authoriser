@@ -7,16 +7,13 @@ library("tdr-jenkinslib")
 
   pipeline {
     agent {
-      label "master"
+      label "built-in"
     }
     parameters {
       choice(name: "STAGE", choices: ["intg", "staging", "prod"], description: "The stage you are running the authoriser tests for")
     }
     stages {
       stage("Run git secrets") {
-        agent {
-          label "master"
-        }
         steps {
           script {
             tdr.runGitSecrets(repo)
