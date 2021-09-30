@@ -14,9 +14,6 @@ library("tdr-jenkinslib")
     }
     stages {
       stage("Run git secrets") {
-        agent {
-          label "built-in"
-        }
         steps {
           script {
             tdr.runGitSecrets(repo)
