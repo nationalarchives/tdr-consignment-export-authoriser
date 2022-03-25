@@ -12,5 +12,5 @@ object Dependencies {
   lazy val pureConfig = "com.github.pureconfig" %% "pureconfig" % "0.14.1"
   lazy val pureConfigCatsEffect = "com.github.pureconfig" %% "pureconfig-cats-effect" % "0.14.1"
   lazy val scalaTest = "org.scalatest" %% "scalatest" % "3.2.2"
-  lazy val slf4j = "org.slf4j" % "slf4j-simple" % "1.7.30"
+  lazy val slf4j = "org.slf4j" % "slf4j-simple" % "1.7.36"
 }
