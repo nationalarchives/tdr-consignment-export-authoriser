@@ -11,6 +11,6 @@ object Dependencies {
   lazy val mockitoScalaTest = "org.mockito" %% "mockito-scala-scalatest" % "1.16.0"
   lazy val pureConfig = "com.github.pureconfig" %% "pureconfig" % "0.14.0"
   lazy val pureConfigCatsEffect = "com.github.pureconfig" %% "pureconfig-cats-effect" % "0.14.0"
-  lazy val scalaTest = "org.scalatest" %% "scalatest" % "3.2.2"
+  lazy val scalaTest = "org.scalatest" %% "scalatest" % "3.2.11"
   lazy val slf4j = "org.slf4j" % "slf4j-simple" % "1.7.30"
 }
