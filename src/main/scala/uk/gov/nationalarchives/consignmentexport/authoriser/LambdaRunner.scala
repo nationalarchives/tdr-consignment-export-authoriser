@@ -1,9 +1,9 @@
 package uk.gov.nationalarchives.consignmentexport.authoriser
 
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
-
 import cats.effect.IO
-import io.chrisdavenport.log4cats.slf4j.Slf4jLogger
+import org.typelevel.log4cats.slf4j.Slf4jLogger
+import cats.effect.unsafe.implicits.global
 
 // An entry point so that you can run the authoriser in a development environment
 object LambdaRunner extends App {
