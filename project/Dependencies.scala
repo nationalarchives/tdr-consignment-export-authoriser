@@ -2,7 +2,7 @@ import sbt._
 
 object Dependencies {
   lazy val awsUtils =  "uk.gov.nationalarchives.aws.utils" %% "tdr-aws-utils" % "0.1.15"
-  lazy val catsEffect = "org.typelevel" %% "cats-effect" % "2.5.4"
+  lazy val catsEffect = "org.typelevel" %% "cats-effect" % "3.3.9"
   lazy val generatedGraphql = "uk.gov.nationalarchives" %% "tdr-generated-graphql" % "0.0.187"
   lazy val graphqlClient = "uk.gov.nationalarchives" %% "tdr-graphql-client" % "0.0.15"
   lazy val log4cats = "io.chrisdavenport" %% "log4cats-core"    % "1.1.1"
