@@ -25,10 +25,10 @@ lazy val root = (project in file("."))
       scalaTest % Test,
       slf4j
     ),
-    fork in Test := true,
-    javaOptions in Test += s"-Dconfig.file=${sourceDirectory.value}/test/resources/application.conf",
-    assemblyJarName in assembly := "consignment-export-authoriser.jar",
-    assemblyMergeStrategy in assembly := {
+    (Test / fork) := true,
+    (Test / javaOptions) += s"-Dconfig.file=${sourceDirectory.value}/test/resources/application.conf",
+    (assembly / assemblyJarName) := "consignment-export-authoriser.jar",
+    (assembly / assemblyMergeStrategy) := {
       case PathList("META-INF", xs@_*) => MergeStrategy.discard
       case _ => MergeStrategy.first
     }
