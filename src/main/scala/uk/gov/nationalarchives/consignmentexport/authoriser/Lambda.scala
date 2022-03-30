@@ -1,28 +1,28 @@
 package uk.gov.nationalarchives.consignmentexport.authoriser
 
-import java.io.{InputStream, OutputStream}
-import java.nio.charset.Charset
-import java.util.UUID
+import cats.effect.unsafe.implicits.global
 import cats.effect.{IO, Resource}
 import cats.implicits._
 import com.nimbusds.oauth2.sdk.token.BearerAccessToken
 import graphql.codegen.GetConsignment.getConsignment.{Data, Variables, document}
-import org.typelevel.log4cats.slf4j.Slf4jLogger
 import io.circe.generic.auto._
 import io.circe.parser.decode
 import io.circe.syntax._
+import org.typelevel.log4cats.slf4j.Slf4jLogger
 import pureconfig.ConfigSource
 import pureconfig.generic.auto._
 import pureconfig.module.catseffect.syntax._
-import sttp.client.{HttpURLConnectionBackend, Identity, NothingT, SttpBackend}
+import sttp.client3.{HttpURLConnectionBackend, Identity, SttpBackend}
 import sttp.model.StatusCode
 import uk.gov.nationalarchives.aws.utils.Clients.kms
 import uk.gov.nationalarchives.aws.utils.KMSUtils
 import uk.gov.nationalarchives.consignmentexport.authoriser.Lambda._
 import uk.gov.nationalarchives.tdr.GraphQLClient
 import uk.gov.nationalarchives.tdr.error.{HttpException, NotAuthorisedError}
-import cats.effect.unsafe.implicits.global
 
+import java.io.{InputStream, OutputStream}
+import java.nio.charset.Charset
+import java.util.UUID
 import scala.concurrent.ExecutionContextExecutor
 import scala.io.Source
 
@@ -72,7 +72,7 @@ class Lambda {
 
 object Lambda {
   implicit val executionContext: ExecutionContextExecutor = scala.concurrent.ExecutionContext.global
-  implicit val backend: SttpBackend[Identity, Nothing, NothingT] = HttpURLConnectionBackend()
+  implicit val backend: SttpBackend[Identity, Any] = HttpURLConnectionBackend()
 
   case class Api(url: String)
   case class LambdaFunction(name: String)
