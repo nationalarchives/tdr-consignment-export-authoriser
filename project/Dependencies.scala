@@ -4,7 +4,7 @@ object Dependencies {
   lazy val awsUtils =  "uk.gov.nationalarchives.aws.utils" %% "tdr-aws-utils" % "0.1.21"
   lazy val catsEffect = "org.typelevel" %% "cats-effect" % "3.3.11"
   lazy val generatedGraphql = "uk.gov.nationalarchives" %% "tdr-generated-graphql" % "0.0.235"
-  lazy val graphqlClient = "uk.gov.nationalarchives" %% "tdr-graphql-client" % "0.0.27"
+  lazy val graphqlClient = "uk.gov.nationalarchives" %% "tdr-graphql-client" % "0.0.28"
   lazy val log4cats = "org.typelevel" %% "log4cats-core"    % "2.2.0"
   lazy val log4catsSlf4j = "org.typelevel" %% "log4cats-slf4j"   % "2.2.0"
   lazy val mockitoScala = "org.mockito" %% "mockito-scala" % "1.17.5"
