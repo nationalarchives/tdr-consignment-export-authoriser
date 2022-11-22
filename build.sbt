@@ -12,7 +12,7 @@ lazy val root = (project in file("."))
       "TDR Releases" at "s3://tdr-releases-mgmt"
     ),
     libraryDependencies ++= Seq(
-      awsUtils,
+      kmsUtils,
       catsEffect,
       generatedGraphql,
       graphqlClient,

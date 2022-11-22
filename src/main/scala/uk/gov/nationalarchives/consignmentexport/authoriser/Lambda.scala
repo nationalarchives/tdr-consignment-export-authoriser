@@ -14,8 +14,8 @@ import pureconfig.generic.auto._
 import pureconfig.module.catseffect.syntax._
 import sttp.client3.{HttpURLConnectionBackend, Identity, SttpBackend}
 import sttp.model.StatusCode
-import uk.gov.nationalarchives.aws.utils.Clients.kms
-import uk.gov.nationalarchives.aws.utils.KMSUtils
+import uk.gov.nationalarchives.aws.utils.kms.KMSClients.kms
+import uk.gov.nationalarchives.aws.utils.kms.KMSUtils
 import uk.gov.nationalarchives.consignmentexport.authoriser.Lambda._
 import uk.gov.nationalarchives.tdr.GraphQLClient
 import uk.gov.nationalarchives.tdr.error.{HttpException, NotAuthorisedError}
