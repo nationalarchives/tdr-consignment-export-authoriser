@@ -2,7 +2,7 @@ import sbt._
 
 object Dependencies {
   lazy val generatedGraphql = "uk.gov.nationalarchives" %% "tdr-generated-graphql" % "0.0.306"
-  lazy val kmsUtils =  "uk.gov.nationalarchives" %% "kms-utils" % "0.1.72"
+  lazy val kmsUtils =  "uk.gov.nationalarchives" %% "kms-utils" % "0.1.73"
   lazy val catsEffect = "org.typelevel" %% "cats-effect" % "3.4.6"
   lazy val graphqlClient = "uk.gov.nationalarchives" %% "tdr-graphql-client" % "0.0.88"
   lazy val log4cats = "org.typelevel" %% "log4cats-core"    % "2.5.0"
