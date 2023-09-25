@@ -1,14 +1,14 @@
 import sbt._
 
 object Dependencies {
-  lazy val generatedGraphql = "uk.gov.nationalarchives" %% "tdr-generated-graphql" % "0.0.347"
-  lazy val kmsUtils =  "uk.gov.nationalarchives" %% "kms-utils" % "0.1.103"
+  lazy val generatedGraphql = "uk.gov.nationalarchives" %% "tdr-generated-graphql" % "0.0.349"
+  lazy val kmsUtils =  "uk.gov.nationalarchives" %% "kms-utils" % "0.1.104"
   lazy val catsEffect = "org.typelevel" %% "cats-effect" % "3.5.1"
-  lazy val graphqlClient = "uk.gov.nationalarchives" %% "tdr-graphql-client" % "0.0.129"
+  lazy val graphqlClient = "uk.gov.nationalarchives" %% "tdr-graphql-client" % "0.0.131"
   lazy val log4cats = "org.typelevel" %% "log4cats-core"    % "2.6.0"
   lazy val log4catsSlf4j = "org.typelevel" %% "log4cats-slf4j"   % "2.6.0"
-  lazy val mockitoScala = "org.mockito" %% "mockito-scala" % "1.17.22"
-  lazy val mockitoScalaTest = "org.mockito" %% "mockito-scala-scalatest" % "1.17.22"
+  lazy val mockitoScala = "org.mockito" %% "mockito-scala" % "1.17.27"
+  lazy val mockitoScalaTest = "org.mockito" %% "mockito-scala-scalatest" % "1.17.27"
   lazy val pureConfig = "com.github.pureconfig" %% "pureconfig" % "0.17.4"
   lazy val pureConfigCatsEffect = "com.github.pureconfig" %% "pureconfig-cats-effect" % "0.17.4"
   lazy val scalaTest = "org.scalatest" %% "scalatest" % "3.2.17"
