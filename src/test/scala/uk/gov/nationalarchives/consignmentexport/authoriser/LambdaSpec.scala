@@ -8,11 +8,12 @@ import uk.gov.nationalarchives.consignmentexport.authoriser.Lambda.Output
 import uk.gov.nationalarchives.tdr.error.HttpException
 
 class LambdaSpec extends LambdaSpecUtils {
-  val methodArnRoot = "arn:aws:execute-api:region:account-id:api-id/stage/HTTP-method/"
-  val consignmentId = "3e133bf3-7a3f-4c56-8e17-f667dc182f02"
-  val exportResourcePath = s"export/$consignmentId"
-  val backendChecksResourcePath = s"backend-checks/$consignmentId"
-  val draftMetadataChecksResourcePath = s"draft-metadata/validate/$consignmentId/fileName.csv"
+
+  "extractConsignmentId" should "correctly extract the consignment id from resource paths" in {
+    resourcePaths.foreach { resourcePath =>
+      Lambda.extractConsignmentId(s"$methodArnRoot$resourcePath") should equal(consignmentId)
+    }
+  }
   
   forAll(inputs) {
     (filename, expectedEffect) => {

@@ -61,15 +61,6 @@ class Lambda {
     }
     _ <- logger.info(s"Got result from API")
   } yield Output(PolicyDocument("2012-10-17", List(Statement(Effect = effect, Resource = input.methodArn)))).asJson.noSpaces
-
-  private def extractConsignmentId(methodArn: String): UUID = {
-    methodArn.split("/") match {
-      case Array(_, _, _, "backend-checks", consignmentId) => UUID.fromString(consignmentId)
-      case Array(_, _, _, "export", consignmentId) => UUID.fromString(consignmentId)
-      case Array(_, _, _, "draft-metadata", "validate", consignmentId, _) => UUID.fromString(consignmentId)
-      case _ => throw new IllegalArgumentException(s"Unexpected path in method arn $methodArn")
-    }
-  }
   
   def process(inputStream: InputStream, outputStream: OutputStream): Unit = {
     for {
@@ -91,4 +82,13 @@ object Lambda {
   case class Statement(Action: String = "execute-api:Invoke", Effect: String, Resource: String)
   case class PolicyDocument(Version: String, Statement: List[Statement])
   case class Output(policyDocument: PolicyDocument)
+
+  def extractConsignmentId(methodArn: String): UUID = {
+    methodArn.split("/") match {
+      case Array(_, _, _, "backend-checks", consignmentId) => UUID.fromString(consignmentId)
+      case Array(_, _, _, "export", consignmentId) => UUID.fromString(consignmentId)
+      case Array(_, _, _, "draft-metadata", "validate", consignmentId, _) => UUID.fromString(consignmentId)
+      case _ => throw new IllegalArgumentException(s"Unexpected path in method arn $methodArn")
+    }
+  }
 }
