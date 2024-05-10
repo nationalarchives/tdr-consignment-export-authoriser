@@ -65,6 +65,7 @@ class Lambda {
   private def extractConsignmentId(methodArn: String): UUID = {
     methodArn.split("/") match {
       case Array(_, _, _, "backend-checks", consignmentId) => UUID.fromString(consignmentId)
+      case Array(_, _, _, "export", consignmentId) => UUID.fromString(consignmentId)
       case Array(_, _, _, "draft-metadata", "validate", consignmentId, _) => UUID.fromString(consignmentId)
       case _ => throw new IllegalArgumentException(s"Unexpected path in method arn $methodArn")
     }
