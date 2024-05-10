@@ -7,11 +7,13 @@ import org.mockito.ArgumentCaptor
 import uk.gov.nationalarchives.consignmentexport.authoriser.Lambda.Output
 import uk.gov.nationalarchives.tdr.error.HttpException
 
+import java.util.UUID
+
 class LambdaSpec extends LambdaSpecUtils {
 
   "extractConsignmentId" should "correctly extract the consignment id from resource paths" in {
     resourcePaths.foreach { resourcePath =>
-      Lambda.extractConsignmentId(s"$methodArnRoot$resourcePath") should equal(consignmentId)
+      Lambda.extractConsignmentId(s"$methodArnRoot$resourcePath") shouldBe UUID.fromString(consignmentId)
     }
   }
   
