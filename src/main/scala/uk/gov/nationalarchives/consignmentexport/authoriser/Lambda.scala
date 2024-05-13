@@ -42,7 +42,7 @@ class Lambda {
     _ <- logger.info("Decoding input")
     input <- IO.fromEither(decode[Input](Source.fromInputStream(input).mkString))
     config <- ConfigSource.default.loadF[IO, Configuration]
-    consignmentId =extractConsignmentId(input.methodArn)
+    consignmentId = extractConsignmentId(input.methodArn)
 
     _ <- logger.info("Loading and decrypting config")
     kmsUtils = KMSUtils(kms(config.kms.endpoint), Map("LambdaFunctionName" -> config.function.name))
@@ -61,7 +61,7 @@ class Lambda {
     }
     _ <- logger.info(s"Got result from API")
   } yield Output(PolicyDocument("2012-10-17", List(Statement(Effect = effect, Resource = input.methodArn)))).asJson.noSpaces
-  
+
   def process(inputStream: InputStream, outputStream: OutputStream): Unit = {
     for {
       output <- getOutput(inputStream)
