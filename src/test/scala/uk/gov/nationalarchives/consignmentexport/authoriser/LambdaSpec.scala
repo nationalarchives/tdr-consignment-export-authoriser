@@ -7,7 +7,16 @@ import org.mockito.ArgumentCaptor
 import uk.gov.nationalarchives.consignmentexport.authoriser.Lambda.Output
 import uk.gov.nationalarchives.tdr.error.HttpException
 
+import java.util.UUID
+
 class LambdaSpec extends LambdaSpecUtils {
+
+  "extractConsignmentId" should "correctly extract the consignment id from resource paths" in {
+    resourcePaths.foreach { resourcePath =>
+      Lambda.extractConsignmentId(s"$methodArnRoot$resourcePath") shouldBe UUID.fromString(consignmentId)
+    }
+  }
+  
   forAll(inputs) {
     (filename, expectedEffect) => {
       "The process method" should s"$expectedEffect access for file $filename" in {
@@ -17,7 +26,7 @@ class LambdaSpec extends LambdaSpecUtils {
         val byteArrayCaptor: ArgumentCaptor[Array[Byte]] = ArgumentCaptor.forClass(classOf[Array[Byte]])
         doNothing.when(output).write(byteArrayCaptor.capture())
         doNothing.when(output).close()
-        val input = """{"type": "TOKEN", "methodArn": "a/method/3e133bf3-7a3f-4c56-8e17-f667dc182f02", "authorizationToken": "token"}""".stripMargin
+        val input = s"""{"type": "TOKEN", "methodArn": "$methodArnRoot$exportResourcePath", "authorizationToken": "token"}""".stripMargin
         val stream = new java.io.ByteArrayInputStream(input.getBytes(java.nio.charset.StandardCharsets.UTF_8.name))
         new Lambda().process(stream, output)
         val res = byteArrayCaptor.getValue.map(_.toChar).mkString
@@ -34,7 +43,7 @@ class LambdaSpec extends LambdaSpecUtils {
     val byteArrayCaptor: ArgumentCaptor[Array[Byte]] = ArgumentCaptor.forClass(classOf[Array[Byte]])
     doNothing.when(output).write(byteArrayCaptor.capture())
     doNothing.when(output).close()
-    val input = """{"type": "TOKEN", "methodArn": "a/method/3e133bf3-7a3f-4c56-8e17-f667dc182f02", "authorizationToken": "token"}""".stripMargin
+    val input = s"""{"type": "TOKEN", "methodArn": "$methodArnRoot$exportResourcePath", "authorizationToken": "token"}""".stripMargin
     val stream = new java.io.ByteArrayInputStream(input.getBytes(java.nio.charset.StandardCharsets.UTF_8.name))
     new Lambda().process(stream, output)
     val res = byteArrayCaptor.getValue.map(_.toChar).mkString
@@ -45,7 +54,7 @@ class LambdaSpec extends LambdaSpecUtils {
   "The process method" should "return an error if the API returns a server error" in {
     stubKmsResponse
     graphqlReturnServerError
-    val input = """{"type": "TOKEN", "methodArn": "a/method/3e133bf3-7a3f-4c56-8e17-f667dc182f02", "authorizationToken": "token"}""".stripMargin
+    val input = s"""{"type": "TOKEN", "methodArn": "$methodArnRoot$exportResourcePath", "authorizationToken": "token"}""".stripMargin
     val stream = new java.io.ByteArrayInputStream(input.getBytes(java.nio.charset.StandardCharsets.UTF_8.name))
     val exception = intercept[HttpException] {
       new Lambda().process(stream, new ByteArrayOutputStream())
@@ -56,7 +65,7 @@ class LambdaSpec extends LambdaSpecUtils {
   "The process method" should "return Deny if the API response is OK but contains a general error" in {
     stubKmsResponse
     graphqlGetConsignment("general_error")
-    val input = """{"type": "TOKEN", "methodArn": "a/method/3e133bf3-7a3f-4c56-8e17-f667dc182f02", "authorizationToken": "token"}""".stripMargin
+    val input = s"""{"type": "TOKEN", "methodArn": "$methodArnRoot$exportResourcePath", "authorizationToken": "token"}""".stripMargin
     val stream = new java.io.ByteArrayInputStream(input.getBytes(java.nio.charset.StandardCharsets.UTF_8.name))
     val exception = intercept[RuntimeException] {
       new Lambda().process(stream, new ByteArrayOutputStream())
