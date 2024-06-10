@@ -9,8 +9,8 @@ object Dependencies {
   lazy val log4catsSlf4j = "org.typelevel" %% "log4cats-slf4j"   % "2.7.0"
   lazy val mockitoScala = "org.mockito" %% "mockito-scala" % "1.17.31"
   lazy val mockitoScalaTest = "org.mockito" %% "mockito-scala-scalatest" % "1.17.31"
-  lazy val pureConfig = "com.github.pureconfig" %% "pureconfig" % "0.17.6"
-  lazy val pureConfigCatsEffect = "com.github.pureconfig" %% "pureconfig-cats-effect" % "0.17.6"
+  lazy val pureConfig = "com.github.pureconfig" %% "pureconfig" % "0.17.7"
+  lazy val pureConfigCatsEffect = "com.github.pureconfig" %% "pureconfig-cats-effect" % "0.17.7"
   lazy val scalaTest = "org.scalatest" %% "scalatest" % "3.2.18"
   lazy val slf4j = "org.slf4j" % "slf4j-simple" % "2.0.13"
 }
