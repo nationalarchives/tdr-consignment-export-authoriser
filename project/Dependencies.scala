@@ -2,7 +2,7 @@ import sbt._
 
 object Dependencies {
   lazy val generatedGraphql = "uk.gov.nationalarchives" %% "tdr-generated-graphql" % "0.0.377"
-  lazy val kmsUtils =  "uk.gov.nationalarchives" %% "kms-utils" % "0.1.187"
+  lazy val kmsUtils =  "uk.gov.nationalarchives" %% "kms-utils" % "0.1.188"
   lazy val catsEffect = "org.typelevel" %% "cats-effect" % "3.5.4"
   lazy val graphqlClient = "uk.gov.nationalarchives" %% "tdr-graphql-client" % "0.0.164"
   lazy val log4cats = "org.typelevel" %% "log4cats-core"    % "2.7.0"
@@ -11,6 +11,6 @@ object Dependencies {
   lazy val mockitoScalaTest = "org.mockito" %% "mockito-scala-scalatest" % "1.17.37"
   lazy val pureConfig = "com.github.pureconfig" %% "pureconfig" % "0.17.7"
   lazy val pureConfigCatsEffect = "com.github.pureconfig" %% "pureconfig-cats-effect" % "0.17.7"
-  lazy val scalaTest = "org.scalatest" %% "scalatest" % "3.2.18"
+  lazy val scalaTest = "org.scalatest" %% "scalatest" % "3.2.19"
   lazy val slf4j = "org.slf4j" % "slf4j-simple" % "2.0.13"
 }
