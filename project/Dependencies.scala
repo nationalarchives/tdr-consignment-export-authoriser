@@ -1,10 +1,10 @@
 import sbt._
 
 object Dependencies {
-  lazy val kmsUtils =  "uk.gov.nationalarchives" %% "kms-utils" % "0.1.307"
-  lazy val generatedGraphql = "uk.gov.nationalarchives" %% "tdr-generated-graphql" % "0.0.436"
+  lazy val kmsUtils =  "uk.gov.nationalarchives" %% "kms-utils" % "0.1.308"
+  lazy val generatedGraphql = "uk.gov.nationalarchives" %% "tdr-generated-graphql" % "0.0.438"
   lazy val catsEffect = "org.typelevel" %% "cats-effect" % "3.6.3"
-  lazy val graphqlClient = "uk.gov.nationalarchives" %% "tdr-graphql-client" % "0.0.255"
+  lazy val graphqlClient = "uk.gov.nationalarchives" %% "tdr-graphql-client" % "0.0.256"
   lazy val log4cats = "org.typelevel" %% "log4cats-core"    % "2.7.1"
   lazy val log4catsSlf4j = "org.typelevel" %% "log4cats-slf4j"   % "2.7.1"
   lazy val mockitoScala = "org.mockito" %% "mockito-scala" % "2.0.0"
