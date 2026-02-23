@@ -10,7 +10,7 @@ permissions:
   contents: write
 jobs:
   test:
-    uses: nationalarchives/tdr-github-actions/.github/workflows/tdr_test.yml@cd362ffa9386c007c816bfd15a25b6f0a3c3b3d6 # v0.0.14
+    uses: nationalarchives/tdr-github-actions/.github/workflows/tdr_test.yml@63eaeb7a4c65080f2a36ac88693fce04005c5a98 # v0.0.16
     with:
       repo-name: tdr-consignment-export-authoriser
       test-command: |
