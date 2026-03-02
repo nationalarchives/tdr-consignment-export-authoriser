@@ -21,7 +21,7 @@ permissions:
 run-name: Deploying Consignment Export Authorizer Lambda ${{inputs.to-deploy}} to ${{inputs.environment}}
 jobs:
   deploy:
-    uses: nationalarchives/tdr-github-actions/.github/workflows/lambda_deploy.yml@cd362ffa9386c007c816bfd15a25b6f0a3c3b3d6 # v0.0.14
+    uses: nationalarchives/tdr-github-actions/.github/workflows/lambda_deploy.yml@63eaeb7a4c65080f2a36ac88693fce04005c5a98 # v0.0.16
     with:
       lambda-name: export-api-authoriser
       deployment-package: consignment-export-authoriser.jar
