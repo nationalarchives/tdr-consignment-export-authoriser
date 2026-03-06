@@ -5,7 +5,7 @@ on:
       - master
 jobs:
   pre-deploy:
-    uses: nationalarchives/tdr-github-actions/.github/workflows/lambda_build.yml@63eaeb7a4c65080f2a36ac88693fce04005c5a98 # v0.0.16
+    uses: nationalarchives/tdr-github-actions/.github/workflows/lambda_build.yml@13faff54c193651ee30482ebdf01e083c8b14203 # v0.0.17
     with:
       lambda-name: export-api-authoriser
       repo-name: tdr-consignment-export-authoriser
