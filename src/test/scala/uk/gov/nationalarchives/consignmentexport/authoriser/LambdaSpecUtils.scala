@@ -79,8 +79,9 @@ class LambdaSpecUtils extends AnyFlatSpec with BeforeAndAfterEach with BeforeAnd
   val methodArnRoot = "arn:aws:execute-api:region:account-id:api-id/stage/HTTP-method/"
   val consignmentId = "3e133bf3-7a3f-4c56-8e17-f667dc182f02"
   val exportResourcePath = s"export/$consignmentId"
+  val backendChecksV2ResourcePath = s"backend-checks-v2/$consignmentId"
   val backendChecksResourcePath = s"backend-checks/$consignmentId"
   val draftMetadataChecksResourcePath = s"draft-metadata/validate/$consignmentId/fileName.csv"
   
-  val resourcePaths: Seq[String] = Seq(exportResourcePath, backendChecksResourcePath, draftMetadataChecksResourcePath)
+  val resourcePaths: Seq[String] = Seq(exportResourcePath, backendChecksResourcePath, backendChecksV2ResourcePath, draftMetadataChecksResourcePath)
 }
