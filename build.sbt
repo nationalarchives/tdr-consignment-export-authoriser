@@ -30,7 +30,8 @@ lazy val root = (project in file("."))
     (Test / envVars) := Map("AWS_ACCESS_KEY_ID" -> "test", "AWS_SECRET_ACCESS_KEY" -> "test"),
     (assembly / assemblyJarName) := "consignment-export-authoriser.jar",
     (assembly / assemblyMergeStrategy) := {
-      case PathList("META-INF", xs@_*) => MergeStrategy.discard
+      case PathList("META-INF", "services", _*) => MergeStrategy.filterDistinctLines
+      case PathList("META-INF", _*) => MergeStrategy.discard
       case _ => MergeStrategy.first
     }
 
