@@ -37,7 +37,7 @@ class Lambda {
       o => IO(o.write(output.getBytes(Charset.forName("UTF-8"))))
     }
 
-  private def getOutput(input: InputStream): IO[String] = for {
+  def getOutput(input: InputStream) = for {
     logger <- Slf4jLogger.create[IO]
     _ <- logger.info("Decoding input")
     input <- IO.fromEither(decode[Input](Source.fromInputStream(input).mkString))
@@ -86,7 +86,6 @@ object Lambda {
   def extractConsignmentId(methodArn: String): UUID = {
     methodArn.split("/") match {
       case Array(_, _, _, "backend-checks", consignmentId) => UUID.fromString(consignmentId)
-      case Array(_, _, _, "backend-checks-v2", consignmentId) => UUID.fromString(consignmentId)
       case Array(_, _, _, "export", consignmentId) => UUID.fromString(consignmentId)
       case Array(_, _, _, "draft-metadata", "validate", consignmentId, _) => UUID.fromString(consignmentId)
       case _ => throw new IllegalArgumentException(s"Unexpected path in method arn $methodArn")
